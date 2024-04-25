@@ -15,7 +15,7 @@ public class Exchanges {
         this.factory = factory;
     }
 
-    public void declareAndBind(String name, String type) throws IOException, TimeoutException {
+    public void declare(String name, String type) throws IOException, TimeoutException {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.exchangeDeclare(name, type);
