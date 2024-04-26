@@ -20,6 +20,14 @@ public class Queues {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.queueDeclare(name, durable, exclusive, autoDelete, args);
+        channel.close();
+    }
+
+    public void bind(String queue, String exchange, String routingKey) throws IOException, TimeoutException {
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+        channel.queueBind(queue, exchange, routingKey);
+        channel.close();
     }
 
 }
