@@ -1,7 +1,10 @@
 package com.kyljmeeski.rabbitmqwrapper;
 
-public interface Producer<T> {
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
-    void produce(T message);
+public interface Producer {
+
+    void produce(String message) throws IOException, TimeoutException;
 
 }
