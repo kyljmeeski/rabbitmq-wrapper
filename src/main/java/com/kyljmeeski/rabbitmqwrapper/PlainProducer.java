@@ -24,6 +24,7 @@ public class PlainProducer implements Producer {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.basicPublish(exchange, routingKey, null, message.getBytes());
+        channel.close();
     }
 
 }
