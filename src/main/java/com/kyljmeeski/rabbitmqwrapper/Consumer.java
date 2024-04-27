@@ -5,6 +5,6 @@ import java.util.concurrent.TimeoutException;
 
 public interface Consumer {
 
-    void startConsuming(String queue, Runnable action) throws IOException, TimeoutException;
+    void startConsuming(String queue, java.util.function.Consumer<String> consumer) throws IOException, TimeoutException;
 
 }
