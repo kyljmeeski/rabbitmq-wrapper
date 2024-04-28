@@ -16,18 +16,12 @@ public class Queues {
         this.factory = factory;
     }
 
-    public void declare(String name, boolean durable, boolean exclusive, boolean autoDelete, Map<String, Object> args) throws IOException, TimeoutException {
+    public RabbitQueue declare(String name, boolean durable, boolean exclusive, boolean autoDelete, Map<String, Object> args) throws IOException, TimeoutException {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.queueDeclare(name, durable, exclusive, autoDelete, args);
         channel.close();
-    }
-
-    public void bind(String queue, String exchange, String routingKey) throws IOException, TimeoutException {
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
-        channel.queueBind(queue, exchange, routingKey);
-        channel.close();
+        return new RabbitQueue(factory, name);
     }
 
 }
