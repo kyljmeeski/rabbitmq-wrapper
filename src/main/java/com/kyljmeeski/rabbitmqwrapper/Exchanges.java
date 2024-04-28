@@ -15,11 +15,12 @@ public class Exchanges {
         this.factory = factory;
     }
 
-    public void declare(String name, String type) throws IOException, TimeoutException {
+    public RabbitExchange declare(String name, String type) throws IOException, TimeoutException {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.exchangeDeclare(name, type);
         channel.close();
+        return new RabbitExchange(name);
     }
 
 }
