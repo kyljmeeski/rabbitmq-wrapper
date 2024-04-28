@@ -10,10 +10,10 @@ import java.util.concurrent.TimeoutException;
 public class PlainProducer implements Producer {
 
     private final ConnectionFactory factory;
-    private final String exchange;
+    private final RabbitExchange exchange;
     private final String routingKey;
 
-    public PlainProducer(ConnectionFactory factory, String exchange, String routingKey) {
+    public PlainProducer(ConnectionFactory factory, RabbitExchange exchange, String routingKey) {
         this.factory = factory;
         this.exchange = exchange;
         this.routingKey = routingKey;
@@ -23,7 +23,7 @@ public class PlainProducer implements Producer {
     public void produce(String message) throws IOException, TimeoutException {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
-        channel.basicPublish(exchange, routingKey, null, message.getBytes());
+        channel.basicPublish(exchange.name(), routingKey, null, message.getBytes());
         channel.close();
     }
 
