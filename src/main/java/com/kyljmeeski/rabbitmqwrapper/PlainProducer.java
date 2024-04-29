@@ -7,18 +7,37 @@ import com.rabbitmq.client.ConnectionFactory;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * A plain implementation of the {@link Producer} interface that produces messages
+ * to a RabbitMQ exchange with a specified routing key.
+ */
 public class PlainProducer implements Producer {
 
     private final ConnectionFactory factory;
     private final RabbitExchange exchange;
     private final String routingKey;
 
+    /**
+     * Constructs a {@code PlainProducer} with the specified RabbitMQ connection factory,
+     * exchange, and routing key.
+     *
+     * @param factory    the RabbitMQ connection factory used to create connections
+     * @param exchange   the RabbitMQ exchange to publish messages to
+     * @param routingKey the routing key for the exchange
+     */
     public PlainProducer(ConnectionFactory factory, RabbitExchange exchange, String routingKey) {
         this.factory = factory;
         this.exchange = exchange;
         this.routingKey = routingKey;
     }
 
+    /**
+     * Produces a message to the RabbitMQ exchange with the specified routing key.
+     *
+     * @param message the message to be published
+     * @throws IOException      if an error occurs while communicating with RabbitMQ
+     * @throws TimeoutException if the operation times out while waiting for a response from RabbitMQ
+     */
     @Override
     public void produce(String message) throws IOException, TimeoutException {
         Connection connection = factory.newConnection();
