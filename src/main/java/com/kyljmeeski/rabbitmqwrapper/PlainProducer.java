@@ -25,7 +25,6 @@ package com.kyljmeeski.rabbitmqwrapper;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -36,7 +35,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class PlainProducer implements Producer {
 
-    private final ConnectionFactory factory;
+    private final Connection connection;
     private final RabbitExchange exchange;
     private final String routingKey;
 
@@ -44,12 +43,12 @@ public class PlainProducer implements Producer {
      * Constructs a {@code PlainProducer} with the specified RabbitMQ connection factory,
      * exchange, and routing key.
      *
-     * @param factory    the RabbitMQ connection factory used to create connections
-     * @param exchange   the RabbitMQ exchange to publish messages to
-     * @param routingKey the routing key for the exchange
+     * @param connection    the RabbitMQ connection
+     * @param exchange      the RabbitMQ exchange to publish messages to
+     * @param routingKey    the routing key for the exchange
      */
-    public PlainProducer(ConnectionFactory factory, RabbitExchange exchange, String routingKey) {
-        this.factory = factory;
+    public PlainProducer(Connection connection, RabbitExchange exchange, String routingKey) {
+        this.connection = connection;
         this.exchange = exchange;
         this.routingKey = routingKey;
     }
@@ -63,10 +62,10 @@ public class PlainProducer implements Producer {
      */
     @Override
     public void produce(String message) throws IOException, TimeoutException {
-        Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.basicPublish(exchange.name(), routingKey, null, message.getBytes());
         channel.close();
+        connection.close();
     }
 
 }

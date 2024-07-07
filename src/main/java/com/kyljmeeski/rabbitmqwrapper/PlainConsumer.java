@@ -25,7 +25,6 @@ package com.kyljmeeski.rabbitmqwrapper;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 import java.io.IOException;
@@ -36,7 +35,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class PlainConsumer implements Consumer {
 
-    private final ConnectionFactory factory;
+    private final Connection connection;
     private final RabbitQueue queue;
     private final java.util.function.Consumer<String> consumer;
 
@@ -44,12 +43,12 @@ public class PlainConsumer implements Consumer {
      * Constructs a {@code PlainConsumer} with the specified RabbitMQ connection factory,
      * queue, and message consumer.
      *
-     * @param factory  the RabbitMQ connection factory used to create connections
-     * @param queue    the RabbitMQ queue to consume messages from
-     * @param consumer the consumer function that processes received messages
+     * @param connection  the RabbitMQ
+     * @param queue       the RabbitMQ queue to consume messages from
+     * @param consumer    the consumer function that processes received messages
      */
-    public PlainConsumer(ConnectionFactory factory, RabbitQueue queue, java.util.function.Consumer<String> consumer) {
-        this.factory = factory;
+    public PlainConsumer(Connection connection, RabbitQueue queue, java.util.function.Consumer<String> consumer) {
+        this.connection = connection;
         this.queue = queue;
         this.consumer = consumer;
     }
@@ -62,7 +61,6 @@ public class PlainConsumer implements Consumer {
      */
     @Override
     public void startConsuming() throws IOException, TimeoutException {
-        Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         DeliverCallback callback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody());

@@ -25,7 +25,6 @@ package com.kyljmeeski.rabbitmqwrapper;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.IOException;
 import java.util.Map;
@@ -36,15 +35,15 @@ import java.util.concurrent.TimeoutException;
  */
 public class Queues {
 
-    private final ConnectionFactory factory;
+    private final Connection connection;
 
     /**
      * Constructs a {@code Queues} utility with the specified RabbitMQ connection factory.
      *
-     * @param factory the RabbitMQ connection factory used to create connections
+     * @param connection the RabbitMQ connection
      */
-    public Queues(ConnectionFactory factory) {
-        this.factory = factory;
+    public Queues(Connection connection) {
+        this.connection = connection;
     }
 
     /**
@@ -60,11 +59,11 @@ public class Queues {
      * @throws TimeoutException if the operation times out while waiting for a response from RabbitMQ
      */
     public RabbitQueue declare(String name, boolean durable, boolean exclusive, boolean autoDelete, Map<String, Object> args) throws IOException, TimeoutException {
-        Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.queueDeclare(name, durable, exclusive, autoDelete, args);
         channel.close();
-        return new RabbitQueue(factory, name);
+        connection.close();
+        return new RabbitQueue(connection, name);
     }
 
 }

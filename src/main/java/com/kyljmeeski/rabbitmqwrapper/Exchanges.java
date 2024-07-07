@@ -25,7 +25,6 @@ package com.kyljmeeski.rabbitmqwrapper;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -35,15 +34,15 @@ import java.util.concurrent.TimeoutException;
  */
 public class Exchanges {
 
-    private final ConnectionFactory factory;
+    private final Connection connection;
 
     /**
      * Constructs an {@code Exchanges} utility with the specified RabbitMQ connection factory.
      *
-     * @param factory the RabbitMQ connection factory used to create connections
+     * @param connection the RabbitMQ connection
      */
-    public Exchanges(ConnectionFactory factory) {
-        this.factory = factory;
+    public Exchanges(Connection connection) {
+        this.connection = connection;
     }
 
     /**
@@ -56,7 +55,6 @@ public class Exchanges {
      * @throws TimeoutException if the operation times out while waiting for a response from RabbitMQ
      */
     public RabbitExchange declare(String name, String type) throws IOException, TimeoutException {
-        Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.exchangeDeclare(name, type);
         channel.close();
