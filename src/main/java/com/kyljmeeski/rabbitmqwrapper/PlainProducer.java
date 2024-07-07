@@ -65,7 +65,6 @@ public class PlainProducer implements Producer {
         Channel channel = connection.createChannel();
         channel.basicPublish(exchange.name(), routingKey, null, message.getBytes());
         channel.close();
-        connection.close();
     }
 
 }

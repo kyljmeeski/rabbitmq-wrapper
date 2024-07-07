@@ -70,7 +70,6 @@ public class RabbitQueue {
         Channel channel = connection.createChannel();
         channel.queueBind(name, exchange.name(), routingKey);
         channel.close();
-        connection.close();
         return this;
     }
 

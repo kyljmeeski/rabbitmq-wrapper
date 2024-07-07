@@ -62,7 +62,6 @@ public class Queues {
         Channel channel = connection.createChannel();
         channel.queueDeclare(name, durable, exclusive, autoDelete, args);
         channel.close();
-        connection.close();
         return new RabbitQueue(connection, name);
     }
 
